@@ -11,17 +11,35 @@ const request = require('request');
 const fetchMyIp = function(callback) {
   // use request to fetch IP address from JSON API
   request('https://api.ipify.org?format=json', (error, response, body) => {
+    if (error) {
+      console.log("Error:", error);
+      return;
+    }
+
+    if (response.statusCode !== 200) {
+      const msg = `Status Code ${response.statusCode} when fetching IP.  Response: ${body}`;
+      return;
+    }
+
     const ip = JSON.parse(body).ip;
-    callback(error, response, ip);
+    callback(ip);
   });
 };
 
 const fetchCoordsByIP = function(ip, callback) {
   request('https://ipvigilante.com/' + ip, (error, response, body) => {
-    console.log(body);
+    if (error) {
+      console.log("Error:", error);
+      return;
+    }
+
+    if (response.statusCode !== 200) {
+      const msg = `Status Code ${response.statusCode} when fetching IP.  Response: ${body}`;
+      return;
+    }
     const IPInfo = JSON.parse(body);
 
-    callback(error, response, IPInfo);
+    callback({ latitude: IPInfo.data.latitude, longitude: IPInfo.data.longitude });
   });
 };
 
