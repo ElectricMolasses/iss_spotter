@@ -17,7 +17,12 @@ const fetchMyIp = function(callback) {
 };
 
 const fetchCoordsByIP = function(ip, callback) {
-  
+  request('https://ipvigilante.com/' + ip, (error, response, body) => {
+    console.log(body);
+    const IPInfo = JSON.parse(body);
+
+    callback(error, response, IPInfo);
+  });
 };
 
 module.exports = {

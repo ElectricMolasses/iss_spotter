@@ -4,7 +4,7 @@ const {
 } = require('./iss');
 
 
-const IP = fetchMyIp((error, response, body) => {
+fetchMyIp((error, response, body) => {
   if (error) {
     console.log("Error:", error);
     return;
@@ -13,11 +13,24 @@ const IP = fetchMyIp((error, response, body) => {
     const msg = `Status Code ${response.statusCode} when fetching IP.  Response: ${body}`;
     return;
   }
-
+  console.log(body);
   return body;
 });
 
-fetchCoordsByIP(IP, (error, data) => {
-  console.log(error);
-  console.log(data);
+
+fetchCoordsByIP('162.245.144.188', (error, response, data) => {
+  if (error) {
+    console.log("Error:", error);
+    return;
+  }
+  if (response.statusCode !== 200) {
+    const msg = `Status Code ${response.statusCode} when fetching IP.  Response: ${data}`;
+    return;
+  }
+
+
+  return {
+    latitude: data.data.latitude,
+    longitude: data.data.longitude
+  };
 });
